@@ -105,7 +105,7 @@ class _NumberOfMealState extends State<NumberOfMeal> {
                   'type': widget.categories[counterr]
                 });
               }
-              Navigator.push(context, MaterialPageRoute(builder: (context) => EnterTheMeals(categories: widget.categories,numberOfMeals: _numberOfMeal),));
+              Navigator.push(context, MaterialPageRoute(builder: (context) => EnterTheMeals(categories: widget.categories,numberOfMeals: _numberOfMeal,id: widget.emailID),));
             },),
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.2,
