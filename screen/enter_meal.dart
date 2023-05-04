@@ -3,13 +3,16 @@ import 'package:flutter/services.dart';
 import 'package:newemenu/screen/add_photo.dart';
 import 'package:newemenu/widget/textbutton.dart';
 
+import '../model/meal_controler_model.dart';
+
 class EnterTheMeals extends StatefulWidget {
   final List categories;
   final List numberOfMeals;
+  final String id;
 
   const EnterTheMeals({Key? key,
     required this.categories,
-    required this.numberOfMeals,})
+    required this.numberOfMeals, required this.id,})
       : super(key: key);
 
   @override
@@ -17,7 +20,7 @@ class EnterTheMeals extends StatefulWidget {
 }
 
 class _EnterTheMealsState extends State<EnterTheMeals> {
-  Map<int, List<MealModel>> map = {};
+  Map<int, List<MealControlerModel>> map = {};
 
   @override
   void initState() {
@@ -118,10 +121,10 @@ class _EnterTheMealsState extends State<EnterTheMeals> {
                 ),
                 TextButtonWidget(text: 'Submit', function: () {
                   map.forEach((key, value) {
-                    List<MealModel> meals=value;
+                    List<MealControlerModel> meals=value;
                     print(meals.toString());
                   });
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => AddPhoto(categoriesWithMeal: map, categories: widget.categories, numberOfMeals: widget.numberOfMeals),));
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => AddPhoto(categoriesWithMeal: map, categories: widget.categories, numberOfMeals: widget.numberOfMeals,id: widget.id),));
                 },),
                 SizedBox(
                   height: MediaQuery
@@ -174,22 +177,12 @@ class _EnterTheMealsState extends State<EnterTheMeals> {
 
   void _fillMealsControllers() {
     List.generate(widget.categories.length, (index) {
-      List<MealModel> meals = [];
+      List<MealControlerModel> meals = [];
       for (int c=0;c<widget.numberOfMeals[index];c++) {
-        meals.add(MealModel());
+        meals.add(MealControlerModel());
       }
       map.putIfAbsent(index, () => meals);
     });
   }
 }
 
-class MealModel {
-  TextEditingController mealName = TextEditingController();
-  TextEditingController price = TextEditingController();
-  TextEditingController components = TextEditingController();
-
-  @override
-  String toString() {
-    return 'MealModel{mealName: ${mealName.text}, price: ${price.text}, components: ${components.text}';
-  }
-}
