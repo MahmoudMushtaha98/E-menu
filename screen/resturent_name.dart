@@ -122,7 +122,7 @@ class _RestaurantNameState extends State<RestaurantName> {
             TextButtonWidget(text: 'Submit', function: () {
               try{
                 _firestore.collection('RestaurantName').add({
-                  'emailID': '123456',//todo change to widget.id
+                  'emailID': widget.id,
                   'numberOfCategories': _numValue,
                   'restaurantName' : _controller.text
                 });
