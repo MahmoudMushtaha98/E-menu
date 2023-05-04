@@ -1,34 +1,30 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:newemenu/widget/textbutton.dart';
 
-import 'enter_meal.dart';
+import 'number_of_meal.dart';
 
 
-class NumberOfMeal extends StatefulWidget {
-  final List categories;
-  final String emailID;
+class NameOfCategory extends StatefulWidget {
+  final int numberOfCategory;
+  final String id;
 
-  const NumberOfMeal(
-      {Key? key, required this.categories, required this.emailID,})
-      : super(key: key);
+  const NameOfCategory({Key? key, required this.numberOfCategory, required this.id}) : super(key: key);
 
   @override
-  State<NumberOfMeal> createState() => _NumberOfMealState();
+  State<NameOfCategory> createState() => _NameOfCategoryState();
 }
 
-class _NumberOfMealState extends State<NumberOfMeal> {
+class _NameOfCategoryState extends State<NameOfCategory> {
+  final _firestore = FirebaseFirestore.instance;
   List<TextEditingController> _controllersList = [];
-  final _firestore=FirebaseFirestore.instance;
-  List<int> _numberOfMeal = [];
+  List<String> _categoriesList = [];
   int counter=0;
 
   @override
   void initState() {
     super.initState();
-    _controllersList = List.generate(
-        widget.categories.length, (index) => TextEditingController());
+    _controllersList = List.generate(widget.numberOfCategory, (index) => TextEditingController());
   }
 
   @override
@@ -37,15 +33,18 @@ class _NumberOfMealState extends State<NumberOfMeal> {
     super.dispose();
   }
 
+
+
+
+
   @override
   Widget build(BuildContext context) {
-    double sizeWidth = MediaQuery.of(context).size.width;
     double sizeHeight = MediaQuery.of(context).size.height;
+    double sizeWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: Colors.black,
       body: SingleChildScrollView(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             SizedBox(
               width: double.infinity,
@@ -53,69 +52,60 @@ class _NumberOfMealState extends State<NumberOfMeal> {
               child: Image.asset('images/E.png',fit: BoxFit.cover),
             ),
             Column(
-              children: List.generate(widget.categories.length, (index) {
-                return Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 20,horizontal: 10),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      SizedBox(
-                        width: sizeWidth*0.7,
-                        child: Text(
-                          'How many ${widget.categories[index]} ?',
-                          style: TextStyle(color: Colors.grey, fontSize: sizeWidth*0.05,fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      SizedBox(
-                        width: sizeWidth*0.2,
-                        height: sizeHeight*0.07,
-                        child: TextField(
-                          controller: _controllersList[index],
-                          style: TextStyle(color: Colors.white),
-                          decoration: InputDecoration(
-                            label: Text('Number',style: TextStyle(color: Colors.grey,fontWeight: FontWeight.bold),),
-                            enabledBorder: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: Color.fromRGBO(212, 175, 55, 1),
+              children: List.generate(widget.numberOfCategory, (index) {
+                return Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        children: [
+                          Text('Category ${index+1}',style: TextStyle(color: Colors.grey,fontSize: sizeWidth*0.05),),
+                          SizedBox(width: sizeWidth*0.1,),
+                          SizedBox(
+                            width: sizeWidth*0.6,
+                            height: sizeHeight*0.07,
+                            child: TextField(
+                              controller: _controllersList[index],
+                              style: TextStyle(color: Colors.white),
+                              decoration: InputDecoration(
+                                label: Text('Name',style: TextStyle(color: Colors.grey,fontWeight: FontWeight.bold),),
+                                enabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color: Color.fromRGBO(212, 175, 55, 1),
+                                    ),
+                                    borderRadius: BorderRadius.all(Radius.circular(10))
                                 ),
-                                borderRadius: BorderRadius.all(Radius.circular(10))
+
+                              ),
                             ),
                           ),
-                          keyboardType: TextInputType.number,
-                          inputFormatters: [
-                            FilteringTextInputFormatter.digitsOnly
-                          ],
-                        ),
+                        ],
                       ),
-                    ],
-                  ),
+                    ),
+                    SizedBox(height: 40,)
+                  ],
                 );
               }),
             ),
+            SizedBox(height: 10,),
+
             TextButtonWidget(text: 'Submit',function: () {
-              _numberOfMeal.clear();
               _controllersList.forEach((element) {
-                _numberOfMeal.add(int.parse(element.text));
-              });
-              for(int counterr=0;counterr<_numberOfMeal.length;counterr++){
-                _firestore.collection('Number of meal').add({
-                  'counter': counterr,
-                  'emailID':widget.emailID,
-                  'numberOfMeal': _numberOfMeal[counterr],
-                  'type': widget.categories[counterr]
+                _categoriesList.add(element.text);
+                _firestore.collection('Categories').add({
+                  'CategoryName': element.text,
+                  'EmailID': widget.id,
+                  'counter': counter
                 });
-              }
-              Navigator.push(context, MaterialPageRoute(builder: (context) => EnterTheMeals(categories: widget.categories,numberOfMeals: _numberOfMeal,id: widget.emailID),));
+                counter++;
+              });
+              Navigator.push(context, MaterialPageRoute(builder: (context) => NumberOfMeal(categories: _categoriesList,emailID: widget.id),));
             },),
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.2,
-            )
+            SizedBox(height: sizeHeight*0.1,)
           ],
+
         ),
       ),
     );
   }
 }
-
-
-
