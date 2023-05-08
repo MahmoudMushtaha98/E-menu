@@ -1,20 +1,36 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-
+import 'package:newemenu/model/meal_model.dart';
+import 'package:newemenu/model/save_order_model.dart';
 import '../widget/numeric_stepper_widget.dart';
 
-class HalfScreen extends StatelessWidget {
-  const HalfScreen({Key? key, required this.mealName, required this.mealComponent, required this.price, this.image,}) : super(key: key);
+class HalfScreen extends StatefulWidget {
+
+   const HalfScreen({Key? key, required this.mealName, required this.mealComponent, required this.price,}) : super(key: key);
 
   final String mealName;
   final String mealComponent;
   final String price;
-  final File? image;
+
+  @override
+  State<HalfScreen> createState() => _HalfScreenState();
+}
+
+class _HalfScreenState extends State<HalfScreen> {
+  final TextEditingController _controller=TextEditingController();
+  int _numValue = 0;
+
+  void _updateNumValue(int newValue) {
+    setState(() {
+      _numValue = newValue;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    double sizeHeight = MediaQuery.of(context).size.height;
+    double sizeWidth = MediaQuery.of(context).size.width;
+    return SizedBox(
+
       height: MediaQuery.of(context).size.height*0.6,
       child: Column(
 
@@ -36,39 +52,35 @@ class HalfScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  SizedBox(height: 20,),
+                  const SizedBox(height: 20,),
                   SizedBox(
                     width: MediaQuery.of(context).size.width*0.50,
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           SizedBox(
-                            width: MediaQuery.of(context).size.width*0.5,
+                            width: MediaQuery.of(context).size.width*0.65,
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(mealName,style: Theme.of(context).textTheme.titleLarge,),
-                                SizedBox(height: 5,),
-                                Text(mealComponent,style: TextStyle(color: Colors.grey),),
-                                SizedBox(height: 5,),
-                                Text('${price} JOD',style: TextStyle(fontSize: 16),)
+                                Text(widget.mealName,style: Theme.of(context).textTheme.titleLarge,),
+                                const SizedBox(height: 5,),
+                                Text(widget.mealComponent,style: const TextStyle(color: Colors.grey),),
+                                const SizedBox(height: 5,),
                               ],),
                           ),
                           Container(
-                              alignment: Alignment.topRight,
-                              height: 100,
+                              alignment: Alignment.center,
+                              height: sizeWidth*0.1,
+                              width: sizeWidth*0.25,
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(15),
                                   color: Colors.white12
                               ),
-                              width: MediaQuery.of(context).size.width*0.45,
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(15),
-                                child: image == null
-                                    ? Icon(Icons.add_a_photo)
-                                    : Image.file(image!, fit: BoxFit.cover),
-                              )
+                              child: Text('${widget.price} JOD',style: const TextStyle(fontSize: 16,fontWeight: FontWeight.bold),)
+
                           )
                         ],
                       ),
@@ -78,12 +90,14 @@ class HalfScreen extends StatelessWidget {
                       alignment: Alignment.centerLeft,
                       color: Colors.grey[100],
                       height: 60,
-                      padding: EdgeInsets.all(8),
-                      child: Text('How many?',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),)
-                  ),                          SizedBox(height: 20,),
-
+                      padding: const EdgeInsets.all(8),
+                      child: const Text('How many?',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),)
+                  ),
+                  SizedBox(height: sizeHeight*0.015,),
+                  NumericStepperWidget(onChange: _updateNumValue),
+                  SizedBox(height: sizeHeight*0.015,),
                   Container(
-                    height: 20,
+                    height: sizeHeight*0.02,
                     width: double.infinity,
                     color: Colors.grey[100],
                   ),
@@ -92,16 +106,16 @@ class HalfScreen extends StatelessWidget {
                     child: Row(
 
                       children: [
-                        Text('Requests ',style: TextStyle(
+                        const Text('Requests ',style: TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.bold
                         ),
                         ),
                         SizedBox(
-                          height: 40,
-                          width: MediaQuery.of(context).size.width*0.75,
+                          height: sizeHeight*0.055,
+                          width: sizeWidth*0.75,
                           child: TextField(
-
+                            controller: _controller,
                             decoration: InputDecoration(
                                 labelText: 'Add note',
                                 border: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
@@ -109,7 +123,7 @@ class HalfScreen extends StatelessWidget {
                             ),
                           ),
                         ),
-                        SizedBox(height: 10,),
+                        SizedBox(height: sizeHeight*0.015,),
                       ],
                     ),
                   ),
@@ -121,7 +135,8 @@ class HalfScreen extends StatelessWidget {
                           style: ButtonStyle(
                               shape: MaterialStatePropertyAll(RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)))),
                           onPressed: () {
-                            Navigator.pop(context);
+                            SaveOrderModel saveOrderModel=SaveOrderModel(mealModel: MealModel(mealName: widget.mealName,mealComponents: widget.mealComponent,price: double.parse(widget.price),counter: 0,type: 'order'), numberOfMeal: _numValue, Requests: _controller.text);
+                            Navigator.pop(context,saveOrderModel);
                           }, child: Container(
                         decoration: BoxDecoration(
                             color: Colors.greenAccent[700],
@@ -130,7 +145,7 @@ class HalfScreen extends StatelessWidget {
                         alignment: Alignment.center,
                         height: MediaQuery.of(context).size.height*0.05,
                         width: double.infinity,
-                        child: Text('Add to basket',style: TextStyle(
+                        child: const Text('Add to basket',style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 14,
                             color: Colors.white
@@ -139,7 +154,8 @@ class HalfScreen extends StatelessWidget {
                       )
                       ),
                     ),
-                  )
+                  ),
+                  SizedBox(height: 50,)
                 ],
               ),
             ),
