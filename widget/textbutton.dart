@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 class TextButtonWidget extends StatelessWidget {
   const TextButtonWidget({
     super.key,
-    required this.text, required this.function,
+    required this.text, required this.callback,
   });
-final VoidCallback function;
+final VoidCallback callback;
 
   final String text;
 
@@ -16,7 +16,7 @@ final VoidCallback function;
     double sizeWidth = MediaQuery.of(context).size.width;
     return TextButton(
 
-      onPressed: function,
+      onPressed: callback,
       child: Container(
         decoration: BoxDecoration(
             color: Color.fromRGBO(212, 175, 55, 1),
