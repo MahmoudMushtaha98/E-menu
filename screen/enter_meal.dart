@@ -48,12 +48,12 @@ class _EnterTheMealsState extends State<EnterTheMeals> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          SizedBox(
+                          const SizedBox(
                             width: double.infinity,
                           ),
                           Text(
                             '${widget.categories[counter]}:',
-                            style: TextStyle(color: Colors.grey, fontSize: 20),
+                            style: const TextStyle(color: Colors.grey, fontSize: 20),
                           ),
                           Padding(
                             padding: const EdgeInsets.all(8.0),
@@ -111,7 +111,7 @@ class _EnterTheMealsState extends State<EnterTheMeals> {
                                 },
                                 shrinkWrap: true,
                                 itemCount: map[counter]!.length,
-                                physics: NeverScrollableScrollPhysics(),
+                                physics: const NeverScrollableScrollPhysics(),
                                 padding: EdgeInsets.zero),
                           )
                         ],
@@ -119,10 +119,9 @@ class _EnterTheMealsState extends State<EnterTheMeals> {
                     );
                   }),
                 ),
-                TextButtonWidget(text: 'Submit', function: () {
+                TextButtonWidget(text: 'Submit', callback: () {
                   map.forEach((key, value) {
                     List<MealControlerModel> meals=value;
-                    print(meals.toString());
                   });
                   Navigator.push(context, MaterialPageRoute(builder: (context) => AddPhoto(categoriesWithMeal: map, categories: widget.categories, numberOfMeals: widget.numberOfMeals,id: widget.id),));
                 },),
@@ -151,10 +150,10 @@ class _EnterTheMealsState extends State<EnterTheMeals> {
           .width * ourWidth,
       height: 70,
       child: TextField(
-        style: TextStyle(color: Colors.white),
+        style: const TextStyle(color: Colors.white),
         decoration: InputDecoration(
-          label: Text(label,style: TextStyle(color: Colors.grey,fontWeight: FontWeight.bold),),
-          enabledBorder: OutlineInputBorder(
+          label: Text(label,style: const TextStyle(color: Colors.grey,fontWeight: FontWeight.bold),),
+          enabledBorder: const OutlineInputBorder(
               borderSide: BorderSide(
                 color: Color.fromRGBO(212, 175, 55, 1),
               ),
