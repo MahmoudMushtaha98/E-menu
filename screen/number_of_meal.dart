@@ -92,7 +92,7 @@ class _NumberOfMealState extends State<NumberOfMeal> {
                 );
               }),
             ),
-            TextButtonWidget(text: 'Submit',function: () {
+            TextButtonWidget(text: 'Submit',callback: () {
               _numberOfMeal.clear();
               _controllersList.forEach((element) {
                 _numberOfMeal.add(int.parse(element.text));
