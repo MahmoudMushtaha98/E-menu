@@ -8,7 +8,7 @@ import 'package:newemenu/widget/textbutton.dart';
 
 class RestaurantName extends StatefulWidget {
   final String id;
-   RestaurantName({Key? key, required this.id}) : super(key: key);
+   const RestaurantName({Key? key, required this.id}) : super(key: key);
 
   @override
   State<RestaurantName> createState() => _RestaurantNameState();
@@ -119,7 +119,7 @@ class _RestaurantNameState extends State<RestaurantName> {
               ],
             ),
             SizedBox(height: sizeHeight*0.06,),
-            TextButtonWidget(text: 'Submit', function: () {
+            TextButtonWidget(text: 'Submit', callback: () {
               try{
                 _firestore.collection('RestaurantName').add({
                   'emailID': widget.id,
