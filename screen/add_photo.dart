@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:newemenu/widget/textbutton.dart';
 
+import '../model/save_order_model.dart';
 import '../widget/meal_widget.dart';
 
 
@@ -15,11 +16,15 @@ class AddPhoto extends StatelessWidget {
 
    AddPhoto({Key? key, required this.categoriesWithMeal, required this.categories, required this.numberOfMeals, required this.id}) : super(key: key);
 
+  List<SaveOrderModel> _saveOrder=[];
+  void _saveOrderr(SaveOrderModel saveOrderModel){
+      _saveOrder.add(saveOrderModel);
+      print(_saveOrder.length);
 
+  }
 
   @override
   Widget build(BuildContext context) {
-    double sizeHeight = MediaQuery.of(context).size.height;
     double sizeWidth = MediaQuery.of(context).size.width;
     List<String> mealNames = [];
     List<double> mealPrice = [];
@@ -36,13 +41,29 @@ class AddPhoto extends StatelessWidget {
 
     int display(int index) {
       int suii=0;
-      if(index==0)
+      if(index==0) {
         return 0;
-      else{
+      } else{
         for(int counter=0;counter<index;counter++){
           suii+=numberOfMeals[counter] as int;
         }
         return suii;
+      }
+    }
+
+    int j=0;
+    for(int counter=0;counter<categories.length;counter++){
+      String cat=categories[counter];
+      for(int i=0;i<numberOfMeals[counter];i++){
+        _firestore.collection('All').add({
+          'counter': i,
+          'emailID':id,
+          'mealComponents':mealComponents[j],
+          'mealName':mealNames[j],
+          'price':mealPrice[j],
+          'type':cat
+        });
+        j++;
       }
     }
 
@@ -67,13 +88,15 @@ class AddPhoto extends StatelessWidget {
                         Container(
                           decoration: BoxDecoration(
                               border: Border.all(color: Colors.grey,width: 2),
-                            borderRadius: BorderRadius.all(Radius.circular(15)),
+                            borderRadius: const BorderRadius.all(Radius.circular(15)),
                           ),
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Column(
                               children: List.generate(numberOfMeals[counter], (index) {
-                                return MealWidget(mealName: mealNames[index+display(counter)], mealComponent: mealComponents[index+display(counter)], price: mealPrice[index+display(counter)].toString());
+                                return MealWidget(mealName: mealNames[index+display(counter)], mealComponent: mealComponents[index+display(counter)], price: mealPrice[index+display(counter)].toString(),
+                                  saveOrder: _saveOrderr,
+                                );
                               }),
                             ),
                           ),
@@ -84,28 +107,5 @@ class AddPhoto extends StatelessWidget {
                 })
                 ,
               ),
-              TextButtonWidget(text: 'try', function: () {
-                int j=0;
-                for(int counter=0;counter<categories.length;counter++){
-                  String cat=categories[counter];
-                  for(int i=0;i<numberOfMeals[counter];i++){
-                    _firestore.collection('All').add({
-                      'counter': i,
-                      'emailID':id,
-                      'mealComponents':mealComponents[j],
-                      'mealName':mealNames[j],
-                      'price':mealPrice[j],
-                      'type':cat
-                    });
-                   j++;
-                  }
-                }
-              },)
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-// print('$i$cat : name :${mealNames[j]}, component: ${mealComponents[j]}, price: ${mealPrice[j]}');
+    ]
+    ))));}}
