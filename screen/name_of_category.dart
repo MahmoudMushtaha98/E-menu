@@ -89,7 +89,8 @@ class _NameOfCategoryState extends State<NameOfCategory> {
             ),
             SizedBox(height: 10,),
 
-            TextButtonWidget(text: 'Submit',function: () {
+            TextButtonWidget(text: 'Submit',callback: () {
+
               _controllersList.forEach((element) {
                 _categoriesList.add(element.text);
                 _firestore.collection('Categories').add({
