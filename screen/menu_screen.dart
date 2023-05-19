@@ -8,10 +8,11 @@ import '../model/meal_model.dart';
 
 class MeanuScreen extends StatefulWidget {
 
+  final String emailId;
   final List<String> catigories;
   final List<MealModel> meals;
 
-  const MeanuScreen({Key? key, required this.catigories, required this.meals,}) : super(key: key);
+  const MeanuScreen({Key? key, required this.catigories, required this.meals, required this.emailId,}) : super(key: key);
 
   @override
   State<MeanuScreen> createState() => _MeanuScreenState();
@@ -25,6 +26,13 @@ class _MeanuScreenState extends State<MeanuScreen> {
       print(_saveOrder.length);
     });
   }
+
+  void _update(newValue){
+    setState(() {
+      _saveOrder=newValue;
+    });
+  }
+
 
   Map<String,List<MealModel>> display={};
   void reorder(){
@@ -41,17 +49,16 @@ class _MeanuScreenState extends State<MeanuScreen> {
   @override
   void initState() {
     super.initState();
-    SystemChrome.setEnabledSystemUIOverlays ([]);
+    SystemChrome.setEnabledSystemUIMode (SystemUiMode.manual, overlays: []);
   }
 
 
   @override
   Widget build(BuildContext context) {
-    double sizeHeight = MediaQuery.of(context).size.height;
     double sizeWidth = MediaQuery.of(context).size.width;
     reorder();
     return Scaffold(
-      floatingActionButton: _saveOrder.length != 0
+      floatingActionButton: _saveOrder.isNotEmpty
           ? Padding(
         padding: const EdgeInsets.all(15.0),
         child: Stack(
@@ -60,11 +67,11 @@ class _MeanuScreenState extends State<MeanuScreen> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => AddToBasket(saveOrder: _saveOrder,)),
+                  MaterialPageRoute(builder: (context) => AddToBasket(saveOrder: _saveOrder,onChange: _update,emailId: widget.emailId,)),
                 );
               },
-              backgroundColor: Color.fromRGBO(212, 175, 55, 1),
-              child: Icon(Icons.add_shopping_cart),
+              backgroundColor: const Color.fromRGBO(212, 175, 55, 1),
+              child: const Icon(Icons.add_shopping_cart),
             ),
             Positioned(
               right: 0,
@@ -72,7 +79,7 @@ class _MeanuScreenState extends State<MeanuScreen> {
               child: Container(
                 alignment: Alignment.center,
                 width: 20,
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   shape: BoxShape.circle,
                   color: Colors.red,
                 ),
