@@ -66,8 +66,8 @@ class _NameOfCategoryState extends State<NameOfCategory> {
                             height: sizeHeight*0.07,
                             child: TextField(
                               controller: _controllersList[index],
-                              style: TextStyle(color: Colors.white),
-                              decoration: InputDecoration(
+                              style: const TextStyle(color: Colors.white),
+                              decoration: const InputDecoration(
                                 label: Text('Name',style: TextStyle(color: Colors.grey,fontWeight: FontWeight.bold),),
                                 enabledBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
@@ -82,22 +82,26 @@ class _NameOfCategoryState extends State<NameOfCategory> {
                         ],
                       ),
                     ),
-                    SizedBox(height: 40,)
+                    const SizedBox(height: 40,)
                   ],
                 );
               }),
             ),
-            SizedBox(height: 10,),
+            const SizedBox(height: 10,),
 
             TextButtonWidget(text: 'Submit',callback: () {
 
               _controllersList.forEach((element) {
                 _categoriesList.add(element.text);
-                _firestore.collection('Categories').add({
-                  'CategoryName': element.text,
-                  'EmailID': widget.id,
-                  'counter': counter
-                });
+                try{
+                  _firestore.collection('Categories').add({
+                    'CategoryName': element.text,
+                    'EmailID': widget.id,
+                    'counter': counter
+                  });
+                }catch(e){
+                  print(e);
+                }
                 counter++;
               });
               Navigator.push(context, MaterialPageRoute(builder: (context) => NumberOfMeal(categories: _categoriesList,emailID: widget.id),));
