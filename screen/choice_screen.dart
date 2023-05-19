@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../model/meal_model.dart';
 import 'menu_screen.dart';
@@ -7,8 +6,9 @@ import 'orders_screen.dart';
 class ChoiceScreen extends StatelessWidget {
   final List<String> catigories;
   final List<MealModel> meals;
+  final String emailId;
 
-  const ChoiceScreen({Key? key, required this.catigories, required this.meals}) : super(key: key);
+  const ChoiceScreen({Key? key, required this.catigories, required this.meals, required this.emailId}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +23,7 @@ class ChoiceScreen extends StatelessWidget {
               padding: const EdgeInsets.all(8.0),
               child: GestureDetector(
                   onTap: () {
-                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MeanuScreen(catigories: catigories,meals: meals),));
+                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MeanuScreen(catigories: catigories,meals: meals,emailId: emailId),));
                   },
                   child:  Container(
                     alignment: Alignment.center,
@@ -45,7 +45,7 @@ class ChoiceScreen extends StatelessWidget {
             ),
             GestureDetector(
                 onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => const OrdersScreen(),));
+                  Navigator.push(context, MaterialPageRoute(builder: (context) =>  OrdersScreen(emailID: emailId),));
                 },
                 child: Container(
                   alignment: Alignment.center,
