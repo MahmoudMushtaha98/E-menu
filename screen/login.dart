@@ -25,6 +25,7 @@ class _LoginPageState extends State<LoginPage> {
   List<String> catigoris = [];
   List<int> catigoryCounter = [];
   List<MealModel> meals = [];
+  late String id;
 
   List sortList(List<int> myList, List<String> mainList) {
     for (int i = 0; i < myList.length - 1; i++) {
@@ -118,13 +119,14 @@ class _LoginPageState extends State<LoginPage> {
                       setState(() {
                         _saving = true;
                       });
+
                       try {
                         catigoris.clear();
                         catigoryCounter.clear();
                         final user = await _auth.signInWithEmailAndPassword(
                             email: _email.text, password: _password.text);
-                        final cat =
-                            await _firestore.collection('Categories').get();
+                        id=await user.user!.uid;
+                        final cat = await _firestore.collection('Categories').get();
                         for (var catigory in cat.docs) {
                           if (catigory.get('EmailID') == user.user!.uid) {
                             catigoris.add(catigory.get('CategoryName'));
@@ -187,12 +189,12 @@ class _LoginPageState extends State<LoginPage> {
         var data = result.first;
         bool isMerchant = data.data()["isMerchant"] ?? false;
         if (isMerchant) {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => ChoiceScreen(meals: meals,catigories: catigoris),));
+          Navigator.push(context, MaterialPageRoute(builder: (context) => ChoiceScreen(meals: meals,catigories: catigoris,emailId: id),));
         } else {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => ChoiceScreen(meals: meals,catigories: catigoris),));
+          Navigator.push(context, MaterialPageRoute(builder: (context) => ChoiceScreen(meals: meals,catigories: catigoris,emailId: id),));
         }
       }else{
-        Navigator.push(context, MaterialPageRoute(builder: (context) => ChoiceScreen(meals: meals,catigories: catigoris),));
+        Navigator.push(context, MaterialPageRoute(builder: (context) => ChoiceScreen(meals: meals,catigories: catigoris,emailId: id),));
 
       }
     } catch (_) {
@@ -200,7 +202,7 @@ class _LoginPageState extends State<LoginPage> {
           context,
           MaterialPageRoute(
             builder: (context) =>
-                MeanuScreen(catigories: catigoris, meals: meals),
+                MeanuScreen(catigories: catigoris, meals: meals,emailId: id),
           ));
     }
   }
