@@ -14,12 +14,12 @@ class AddPhoto extends StatelessWidget {
   final _firestore=FirebaseFirestore.instance;
   final String id;
 
-   AddPhoto({Key? key, required this.categoriesWithMeal, required this.categories, required this.numberOfMeals, required this.id}) : super(key: key);
+  AddPhoto({Key? key, required this.categoriesWithMeal, required this.categories, required this.numberOfMeals, required this.id}) : super(key: key);
 
   List<SaveOrderModel> _saveOrder=[];
   void _saveOrderr(SaveOrderModel saveOrderModel){
-      _saveOrder.add(saveOrderModel);
-      print(_saveOrder.length);
+    _saveOrder.add(saveOrderModel);
+    print(_saveOrder.length);
 
   }
 
@@ -55,57 +55,66 @@ class AddPhoto extends StatelessWidget {
     for(int counter=0;counter<categories.length;counter++){
       String cat=categories[counter];
       for(int i=0;i<numberOfMeals[counter];i++){
-        _firestore.collection('All').add({
-          'counter': i,
-          'emailID':id,
-          'mealComponents':mealComponents[j],
-          'mealName':mealNames[j],
-          'price':mealPrice[j],
-          'type':cat
-        });
+        try{
+          _firestore.collection('All').add({
+            'counter': i,
+            'emailID':id,
+            'mealComponents':mealComponents[j],
+            'mealName':mealNames[j],
+            'price':mealPrice[j],
+            'type':cat
+          });
+        }catch(e){
+          print(e);
+        }
         j++;
       }
     }
 
     return Scaffold(
 
-      backgroundColor: Colors.black,
-      body: SingleChildScrollView(
-        child: SafeArea(
-          child: Column(
-            children: [
-              Column(
-                children:List.generate(categories.length, (counter) {
-                  return Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(categories[counter],style: TextStyle(fontSize: sizeWidth*0.07,color: Colors.blueGrey),),
-                        ),
-                        Container(
-                          decoration: BoxDecoration(
-                              border: Border.all(color: Colors.grey,width: 2),
-                            borderRadius: const BorderRadius.all(Radius.circular(15)),
-                          ),
-                          child: Padding(
+        backgroundColor: Colors.black,
+        body: SingleChildScrollView(
+            child: SafeArea(
+                child: Column(
+                    children: [
+                      Column(
+                        children:List.generate(categories.length, (counter) {
+                          return Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Column(
-                              children: List.generate(numberOfMeals[counter], (index) {
-                                return MealWidget(mealName: mealNames[index+display(counter)], mealComponent: mealComponents[index+display(counter)], price: mealPrice[index+display(counter)].toString(),
-                                  saveOrder: _saveOrderr,
-                                );
-                              }),
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(categories[counter],style: TextStyle(fontSize: sizeWidth*0.07,color: Colors.blueGrey),),
+                                ),
+                                Container(
+                                  decoration: BoxDecoration(
+                                    border: Border.all(color: Colors.grey,width: 2),
+                                    borderRadius: const BorderRadius.all(Radius.circular(15)),
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Column(
+                                      children: List.generate(numberOfMeals[counter], (index) {
+                                        return MealWidget(mealName: mealNames[index+display(counter)], mealComponent: mealComponents[index+display(counter)], price: mealPrice[index+display(counter)].toString(),
+                                          saveOrder: _saveOrderr,
+                                        );
+                                      }),
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
-                })
-                ,
-              ),
-    ]
-    ))));}}
+                          );
+                        })
+                        ,
+                      ),
+                    ]
+                )
+            )
+        )
+    );
+  }
+}
