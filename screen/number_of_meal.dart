@@ -98,12 +98,16 @@ class _NumberOfMealState extends State<NumberOfMeal> {
                 _numberOfMeal.add(int.parse(element.text));
               });
               for(int counterr=0;counterr<_numberOfMeal.length;counterr++){
-                _firestore.collection('Number of meal').add({
-                  'counter': counterr,
-                  'emailID':widget.emailID,
-                  'numberOfMeal': _numberOfMeal[counterr],
-                  'type': widget.categories[counterr]
-                });
+               try{
+                 _firestore.collection('Number of meal').add({
+                   'counter': counterr,
+                   'emailID':widget.emailID,
+                   'numberOfMeal': _numberOfMeal[counterr],
+                   'type': widget.categories[counterr]
+                 });
+               }catch(e){
+                 print(e);
+               }
               }
               Navigator.push(context, MaterialPageRoute(builder: (context) => EnterTheMeals(categories: widget.categories,numberOfMeals: _numberOfMeal,id: widget.emailID),));
             },),
