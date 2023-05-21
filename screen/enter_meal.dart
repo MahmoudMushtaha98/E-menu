@@ -1,8 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:newemenu/screen/add_photo.dart';
+import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
+import 'package:newemenu/screen/login.dart';
 import 'package:newemenu/widget/textbutton.dart';
-
 import '../model/meal_controler_model.dart';
 
 class EnterTheMeals extends StatefulWidget {
@@ -21,6 +23,7 @@ class EnterTheMeals extends StatefulWidget {
 
 class _EnterTheMealsState extends State<EnterTheMeals> {
   Map<int, List<MealControlerModel>> map = {};
+  final _firestore=FirebaseFirestore.instance;
 
   @override
   void initState() {
@@ -33,108 +36,174 @@ class _EnterTheMealsState extends State<EnterTheMeals> {
     super.dispose();
   }
 
+  bool _saving=false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
-        body: SingleChildScrollView(
-          child: SafeArea(
-            child: Column(
-              children: [
-                Column(
-                  children: List.generate(widget.categories.length, (counter) {
-                    return Padding(
-                      padding: const EdgeInsets.fromLTRB(10, 10, 0, 50),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const SizedBox(
-                            width: double.infinity,
-                          ),
-                          Text(
-                            '${widget.categories[counter]}:',
-                            style: const TextStyle(color: Colors.grey, fontSize: 20),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: ListView.builder(
-                                itemBuilder: (context, index) {
-                                  return Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Column(
-                                      children: [
-                                        Row(
-                                          mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                          children: [
-                                            buildSizedBoxOfTextfield(
-                                                context,
-                                                index,
-                                                0.6,
-                                                'Meal name',
-                                                0,
-                                                map[counter]![index].mealName),
-                                            SizedBox(
-                                              width: MediaQuery
-                                                  .of(context)
-                                                  .size
-                                                  .width *
-                                                  0.05,
-                                            ),
-                                            buildSizedBoxOfTextfield(
-                                                context,
-                                                index,
-                                                0.2,
-                                                'Price',
-                                                1,
-                                                map[counter]![index].price),
-                                          ],
-                                        ),
-                                        buildSizedBoxOfTextfield(
-                                            context,
-                                            index,
-                                            0.85,
-                                            'Meal components',
-                                            0,
-                                            map[counter]![index].components),
-                                        SizedBox(
-                                          height:
-                                          MediaQuery
-                                              .of(context)
-                                              .size
-                                              .height *
-                                              0.05,
-                                        ),
-                                      ],
-                                    ),
-                                  );
-                                },
-                                shrinkWrap: true,
-                                itemCount: map[counter]!.length,
-                                physics: const NeverScrollableScrollPhysics(),
-                                padding: EdgeInsets.zero),
-                          )
-                        ],
-                      ),
-                    );
-                  }),
-                ),
-                TextButtonWidget(text: 'Submit', callback: () {
-                  map.forEach((key, value) {
-                    List<MealControlerModel> meals=value;
-                  });
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => AddPhoto(categoriesWithMeal: map, categories: widget.categories, numberOfMeals: widget.numberOfMeals,id: widget.id),));
-                },),
-                SizedBox(
-                  height: MediaQuery
-                      .of(context)
-                      .size
-                      .height * 0.05,
-                )
-              ],
+        body: ModalProgressHUD(
+          inAsyncCall: _saving,
+          child: SingleChildScrollView(
+            child: SafeArea(
+              child: Column(
+                children: [
+                  Column(
+                    children: List.generate(widget.categories.length, (counter) {
+                      return Padding(
+                        padding: const EdgeInsets.fromLTRB(10, 10, 0, 50),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const SizedBox(
+                              width: double.infinity,
+                            ),
+                            Text(
+                              '${widget.categories[counter]}:',
+                              style: const TextStyle(color: Colors.grey, fontSize: 20),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: ListView.builder(
+                                  itemBuilder: (context, index) {
+                                    return Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Column(
+                                        children: [
+                                          Row(
+                                            mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                            children: [
+                                              buildSizedBoxOfTextfield(
+                                                  context,
+                                                  index,
+                                                  0.6,
+                                                  'Meal name',
+                                                  0,
+                                                  map[counter]![index].mealName),
+                                              SizedBox(
+                                                width: MediaQuery
+                                                    .of(context)
+                                                    .size
+                                                    .width *
+                                                    0.05,
+                                              ),
+                                              buildSizedBoxOfTextfield(
+                                                  context,
+                                                  index,
+                                                  0.2,
+                                                  'Price',
+                                                  1,
+                                                  map[counter]![index].price),
+                                            ],
+                                          ),
+                                          buildSizedBoxOfTextfield(
+                                              context,
+                                              index,
+                                              0.85,
+                                              'Meal components',
+                                              0,
+                                              map[counter]![index].components),
+                                          SizedBox(
+                                            height:
+                                            MediaQuery
+                                                .of(context)
+                                                .size
+                                                .height *
+                                                0.05,
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  },
+                                  shrinkWrap: true,
+                                  itemCount: map[counter]!.length,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  padding: EdgeInsets.zero),
+                            )
+                          ],
+                        ),
+                      );
+                    }),
+                  ),
+                  TextButtonWidget(text: 'Submit', callback: () async{
+                    setState(() {
+                      _saving=true;
+                    });
+                    await deleteMeals();
+                    if(mounted) {
+                      await selectMeals();
+                    }
+                    map.forEach((key, value) {
+                      List<MealControlerModel> meals=value;
+                    });
+                    if(mounted) {
+                      setState(() {
+                        _saving=false;
+                      });
+                      Navigator.pushReplacement(context, MaterialPageRoute(
+                          builder: (context) => LoginPage()));
+                    }
+                    },),
+                  SizedBox(
+                    height: MediaQuery
+                        .of(context)
+                        .size
+                        .height * 0.05,
+                  )
+                ],
+              ),
             ),
           ),
         ));
+  }
+
+  Future<void> deleteMeals() async {
+    final del=await _firestore.collection('All').where('emailID',isEqualTo: widget.id).get();
+    if(del.docs.isNotEmpty){
+      for(var dele in del.docs){
+        dele.reference.delete();
+      }
+    }
+  }
+
+  Future<void> selectMeals() async {
+    List<String> mealNames = [];
+    List<double> mealPrice = [];
+    List<String> mealComponents = [];
+
+    List mealsLists = map.values.toList();
+    for (var meals in mealsLists) {
+      for (var meal in meals) {
+        mealNames.add(meal.mealName.text);
+        mealPrice.add((double.parse(meal.price.text)));
+        mealComponents.add(meal.components.text);
+      }
+    }
+
+
+
+    int j=0;
+    for(int counter=0;counter<widget.categories.length;counter++){
+      String cat=widget.categories[counter];
+      for(int i=0;i<widget.numberOfMeals[counter];i++){
+        try{
+          await _firestore.collection('All').add({
+            'counter': i,
+            'emailID':widget.id,
+            'mealComponents':mealComponents[j],
+            'mealName':mealNames[j],
+            'price':mealPrice[j],
+            'type':cat
+          });
+        }catch(e){
+          if (kDebugMode) {
+            print(e);
+          }
+        }
+        j++;
+      }
+    }
   }
 
   SizedBox buildSizedBoxOfTextfield(BuildContext context,
