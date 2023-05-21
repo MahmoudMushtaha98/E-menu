@@ -23,9 +23,9 @@ class _AddToBasketState extends State<AddToBasket> {
   final _firestore=FirebaseFirestore.instance;
   bool _saving=false;
 
-  void _submitForm() async{
+  Future<void> _submitForm() async{
     if (_formKey.currentState!.validate()) {
-      suiii(context);
+      doThat(context);
     }
   }
 
@@ -157,7 +157,9 @@ class _AddToBasketState extends State<AddToBasket> {
                           ),
                         ),
                       ),
-                      TextButtonWidget(text: 'Request', callback: _submitForm,)
+                      TextButtonWidget(text: 'Request', callback: () async{
+                        await _submitForm();
+                      },)
                     ],
                   ),
                 ),
@@ -169,7 +171,7 @@ class _AddToBasketState extends State<AddToBasket> {
     );
   }
 
-  Future<void> suiii(BuildContext context) async {
+  Future<void> doThat(BuildContext context) async {
      setState(() {
       _saving=true;
     });
