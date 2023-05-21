@@ -23,8 +23,9 @@ class _OrderDetailsState extends State<OrderDetails> {
       if (widget.orderID == meal.get('orderID')) {
         final mealName = await meal.get('mealName');
         final mealRequest = await meal.get('Requests');
+        final number= await meal.get('numberOfMeal');
         setState(() {
-          meals.add(MealOrderModel(mealName: mealName, mealRequest: mealRequest));
+          meals.add(MealOrderModel(mealName: mealName, mealRequest: mealRequest,numberOfMeal: number));
         });
       }
     }
@@ -63,22 +64,26 @@ class _OrderDetailsState extends State<OrderDetails> {
                         children: [
                           Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child: Text(meals[index].mealName,style: const TextStyle(color: Colors.white,fontSize: 20),),
+                            child: Text(
+                              '${meals[index].mealName}   x${(meals[index].numberOfMeal==0?meals[index].numberOfMeal+1:meals[index].numberOfMeal)}',style: const TextStyle(color: Colors.white,fontSize: 20),),
                           ),
-                          meals[index].mealRequest==''?SizedBox():
+                          meals[index].mealRequest==''?const SizedBox():
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Container(
-                              padding: EdgeInsets.all(8),
+                              padding: const EdgeInsets.all(8),
                               width: double.infinity,
-                              color: Colors.red,
+                              decoration: const BoxDecoration(
+                                color: Colors.red,
+                                borderRadius: BorderRadius.all(Radius.circular(15))
+                              ),
                               child: Text('Notes: ${meals[index].mealRequest}',style: const TextStyle(color: Colors.white,fontSize: 20),),
                             ),
                           )
                         ],
                       ),
                     ),
-                    Divider(color: Colors.grey,),
+                    const Divider(color: Colors.grey,),
                   ],
                 );
               }),
@@ -118,5 +123,6 @@ class _OrderDetailsState extends State<OrderDetails> {
 class MealOrderModel{
   final String mealName;
   final String mealRequest;
-  MealOrderModel({required this.mealName, required this.mealRequest});
+  final int numberOfMeal;
+  MealOrderModel({required this.mealName, required this.mealRequest,required this.numberOfMeal});
 }
