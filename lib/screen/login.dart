@@ -3,8 +3,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
-import 'package:newemenu/model/meal_model.dart';
-import 'package:newemenu/screen/signup.dart';
+import 'package:eMenu/model/meal_model.dart';
+import 'package:eMenu/screen/forgot_password.dart';
+import 'package:eMenu/screen/signup.dart';
 
 import '../widget/textbutton.dart';
 import 'choice_screen.dart';
@@ -152,6 +153,9 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
             ),
+            TextButton(onPressed: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) => ForgotPassword(),));
+            }, child: const Text('Forgot password',style: TextStyle(color: Colors.blue),)),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 20.0),
               child: Column(

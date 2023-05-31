@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:newemenu/screen/order_details.dart';
+import 'package:eMenu/screen/order_details.dart';
 
 
 class OrdersScreen extends StatefulWidget {

@@ -3,8 +3,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
-import 'package:newemenu/screen/login.dart';
-import 'package:newemenu/widget/textbutton.dart';
+import 'package:eMenu/screen/login.dart';
+import 'package:eMenu/widget/textbutton.dart';
 import '../model/meal_controler_model.dart';
 
 class EnterTheMeals extends StatefulWidget {

@@ -1,4 +1,4 @@
-import 'package:newemenu/model/meal_model.dart';
+import 'package:eMenu/model/meal_model.dart';
 
 class SaveOrderModel{
 

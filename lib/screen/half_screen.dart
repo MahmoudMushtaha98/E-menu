@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:newemenu/model/meal_model.dart';
-import 'package:newemenu/model/save_order_model.dart';
+import 'package:eMenu/model/meal_model.dart';
+import 'package:eMenu/model/save_order_model.dart';
 import '../widget/numeric_stepper_widget.dart';
 
 class HalfScreen extends StatefulWidget {

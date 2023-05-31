@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
-import 'package:newemenu/widget/textbutton.dart';
+import 'package:eMenu/widget/textbutton.dart';
 
 import 'number_of_meal.dart';
 

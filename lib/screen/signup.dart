@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
-import 'package:newemenu/widget/textbutton.dart';
+import 'package:eMenu/widget/textbutton.dart';
 import 'resturent_name.dart';
 
 class SignUpScreen extends StatefulWidget {

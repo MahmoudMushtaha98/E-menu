@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:newemenu/model/save_order_model.dart';
-import 'package:newemenu/screen/add_to_basket.dart';
-import 'package:newemenu/widget/meal_widget.dart';
+import 'package:eMenu/model/save_order_model.dart';
+import 'package:eMenu/screen/add_to_basket.dart';
+import 'package:eMenu/widget/meal_widget.dart';
 
 import '../model/meal_model.dart';
 
