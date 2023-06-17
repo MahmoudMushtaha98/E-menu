@@ -19,11 +19,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final _formKey3=GlobalKey<FormState>();
   final TextEditingController _email = TextEditingController();
   final TextEditingController _password = TextEditingController();
-  final TextEditingController _repassword = TextEditingController();
+  final TextEditingController _rePassword = TextEditingController();
 
   final _auth = FirebaseAuth.instance;
 
   bool _saving = false;
+  bool obscureText=true;
+  bool obscureText2=true;
 
   Future<void> _submitForm()async{
     if(_formKey.currentState!.validate()&&_formKey2.currentState!.validate() && _formKey3.currentState!.validate()){
@@ -109,32 +111,37 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     height: sizeHeight * 0.07,
                     child: TextFormField(
                       controller: _password,
-                      obscureText: true,
+                      obscureText: obscureText,
                       style: const TextStyle(color: Colors.white),
-                      decoration: const InputDecoration(
-                        label: Text(
-                          'Password',
-                          style: TextStyle(
-                              color: Colors.grey, fontWeight: FontWeight.bold),
+                      decoration: InputDecoration(
+                        labelText: 'Password',
+                        labelStyle: const TextStyle(color: Colors.grey, fontWeight: FontWeight.bold),
+                        enabledBorder: const OutlineInputBorder(
+                          borderSide: BorderSide(color: Color.fromRGBO(212, 175, 55, 1)),
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
                         ),
-                        enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Color.fromRGBO(212, 175, 55, 1),
-                            ),
-                            borderRadius: BorderRadius.all(Radius.circular(10))),
+                        suffixIcon: IconButton(
+                          onPressed: () {
+                            setState(() {
+                              obscureText = !obscureText;
+                            });
+                          },
+                          icon: Icon(obscureText ? Icons.visibility_off : Icons.visibility,color: Colors.grey),
+                        ),
                       ),
                       validator: (value) {
-                        if(value!.isEmpty){
-                          return 'Please enter yor password';
-                        }else if(passwordValidator(value)==false){
-                          return 'Password weak';
-                        }else{
+                        if (value!.isEmpty) {
+                          return 'Please enter your password';
+                        } else if (passwordValidator(value) == false) {
+                          return 'Weak password';
+                        } else {
                           return null;
                         }
                       },
                     ),
                   ),
                 ),
+
                 SizedBox(
                   height: sizeHeight * 0.04,
                 ),
@@ -144,30 +151,32 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     width: sizeWidth * 0.8,
                     height: sizeHeight * 0.07,
                     child: TextFormField(
-                      controller: _repassword,
-                      obscureText: true,
+                      controller: _rePassword,
+                      obscureText: obscureText2,
                       style: const TextStyle(color: Colors.white),
-                      decoration: const InputDecoration(
-                        label: Text(
-                          're-password',
-                          style: TextStyle(
-                              color: Colors.grey, fontWeight: FontWeight.bold),
+                      decoration: InputDecoration(
+                        labelText: 're-password',
+                        labelStyle: const TextStyle(color: Colors.grey, fontWeight: FontWeight.bold),
+                        enabledBorder: const OutlineInputBorder(
+                          borderSide: BorderSide(color: Color.fromRGBO(212, 175, 55, 1)),
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
                         ),
-                        enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Color.fromRGBO(212, 175, 55, 1),
-                            ),
-                            borderRadius: BorderRadius.all(Radius.circular(10))),
+                        suffixIcon: IconButton(
+                          onPressed: () {
+                            setState(() {
+                              obscureText2 = !obscureText2;
+                            });
+                          },
+                          icon: Icon(obscureText2 ? Icons.visibility_off : Icons.visibility,color: Colors.grey),
+                        ),
                       ),
                       validator: (value) {
-                        if(value!.isEmpty){
-                          return 'Please enter yor password';
-                        }else if(passwordValidator(value)==false){
-                          return 'Password weak';
-                        }else if(!value.contains(_repassword.text)){
-                          return 'password not correct';
-                        }else{
-                          return null;
+                        if (value!.isEmpty) {
+                          return 'Please enter your password';
+                        } else if (passwordValidator(value) == false) {
+                          return 'Weak password';
+                        } else if(!value.contains(_password.text)){
+                          return 'Password does not match';
                         }
                       },
                     ),
