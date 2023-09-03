@@ -28,14 +28,12 @@ SaveOrderModel? order;
     return GestureDetector(
 
       onTap: () async {
-        // wait for a value to be returned from HalfScreen
         final result = await showModalBottomSheet(
           context: context,
           builder: (context) {
             return HalfScreen(mealName: widget.mealName,mealComponent: widget.mealComponent,price: widget.price,);
           },
         );
-        // do something with the result
         widget.saveOrder(result);
       },
       child: ListTile(

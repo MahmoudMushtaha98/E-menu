@@ -46,7 +46,7 @@ class ChoiceScreen extends StatelessWidget {
               padding: const EdgeInsets.all(8.0),
               child: GestureDetector(
                   onTap: () {
-                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MeanuScreen(catigories: catigories,meals: meals,emailId: emailId),));
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => MeanuScreen(catigories: catigories,meals: meals,emailId: emailId),));
                   },
                   child:  Container(
                     alignment: Alignment.center,

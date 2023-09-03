@@ -6,7 +6,6 @@ import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:eMenu/model/meal_model.dart';
 import 'package:eMenu/screen/forgot_password.dart';
 import 'package:eMenu/screen/signup.dart';
-
 import '../widget/textbutton.dart';
 import 'choice_screen.dart';
 import 'menu_screen.dart';
@@ -62,11 +61,15 @@ class _LoginPageState extends State<LoginPage> {
     return mainList;
   }
 
+
   Future<void> _submitForm() async{
     if (_formKey.currentState!.validate()&&_formKey2.currentState!.validate()) {
       await loginGenerate();
+      _email.clear();
+      _password.clear();
     }
   }
+
 
   @override
   Widget build(BuildContext context) {
